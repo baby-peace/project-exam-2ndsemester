@@ -1,0 +1,23 @@
+---
+- name: install lamp stack and laravel script
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: copy file with owner and permissions
+    ansible.builtin.copy:
+      src: /home/vagrant/deploy_lamp_stack.sh
+      dest: /home/vagrant/deploy_lamp_stack.sh
+      owner: root
+      group: root
+      mode:  '0755'
+
+  - name: install lamp stack and laravel
+    script: /home/vagrant/deploy_lamp_stack.sh
+
+  - name: check uptime
+    cron:
+      name: "check uptime"
+      minute: 0
+      hour: 0 
+      job: uptime >> /home/vagrant/uptime.txt
